@@ -1,10 +1,8 @@
 <?php
 
-class curl {
-        
-    // Обычный GET запрос без параметров для получения списка сотрудников
+class employeeController {
     
-    public function getEmployees(){              
+    public function getList(){             
         $ch = curl_init('https://online.moysklad.ru/api/remap/1.2/entity/employee');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch,CURLOPT_HTTPAUTH,CURLAUTH_BASIC);
@@ -12,19 +10,18 @@ class curl {
         $res = curl_exec($ch);
         $result = json_decode($res,true);
         curl_close($ch);
-        return $result;
+        for($i=0; $i < count($result['rows']); $i++) {
+            var_dump($result['rows'][$i]['fullName']);
+            echo '<br>';
+        }
+        
     }
     
-    // POST запрос для создания сотрудника
-    
-    public function newEmployee($firstname,$middlename,$lastname,$inn, $position, $phone){
+    public function createEmployee() {
         $data = [
-            "firstName" => $firstname,
-            "middleName" => $middlename,
-            "lastName" => $lastname,
-            "inn" => $inn,
-            "position" => $position,
-            "phone" => $phone,
+            "firstName" => $_POST['firstName'],
+            "middleName" => $_POST['middleName'],
+            "lastName" => $_POST['lastName']
         ];
         $ch = curl_init('https://online.moysklad.ru/api/remap/1.2/entity/employee');
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -39,13 +36,15 @@ class curl {
         return $result;
     }
     
-    public function changeEmployee($firstname,$lastname){
+    public function changeEmployee() {
         $data = [
-            "firstname" => $firstname,
-            "lastname" => $lastname,
+        "firstName" => $_POST['firstName']
         ];
-        $ch = curl_init('https://online.moysklad.ru/api/remap/1.2/entity/employee/03f82b59-c213-11ec-0a80-012a0006bbc5');
-        curl_setopt($ch, CURLOPT_PUT, true);
+
+        $id  = $_POST['id'];
+
+        $ch = curl_init("https://online.moysklad.ru/api/remap/1.2/entity/employee/" . $id);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data, JSON_UNESCAPED_UNICODE));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -54,7 +53,21 @@ class curl {
         $res = curl_exec($ch);
         $result = json_decode($res,true);
         curl_close($ch);
-        return $result;
+        print_r("Успех");
     }
     
+    public function deleteEmployee() {
+        
+        $id  = $_POST['id'];
+
+        $ch = curl_init("https://online.moysklad.ru/api/remap/1.2/entity/employee/" . $id);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch,CURLOPT_HTTPAUTH,CURLAUTH_BASIC);
+        curl_setopt($ch, CURLOPT_USERPWD, "admin@vergazka:39c8f67393ee");
+        $res = curl_exec($ch);
+        $result = json_decode($res,true);
+        curl_close($ch);
+    }
 }
+

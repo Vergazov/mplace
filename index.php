@@ -1,20 +1,10 @@
-<?php 
-require_once 'model/curl.php';
-
-function debug($data) {
-     echo '<pre>';
-     print_r($data);
-     echo '</pre>';
- } 
-
-$employes = new curl();
+<?php
  
-//$result = $employes->newEmployee("Петров", "Петр", "Иванович", "222490425273", "Директор", "89534758562");
+define('ROOT', dirname(__FILE__));
+ require_once (ROOT . '/components/Router.php');
+ require_once 'view/index.html';
+ 
 
-//$res = $employes->getEmployees();
-//debug($res);
-
-$resu = $employes->changeEmployee("Василий", "Теркин");
-debug($resu);
-        
+$router = new Router();
+$router->run();
 
