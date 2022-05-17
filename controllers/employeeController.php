@@ -1,17 +1,16 @@
 <?php
 
 class employeeController {
-    
-    public function getList(){             
-        $ch = curl_init('https://online.moysklad.ru/api/remap/1.2/entity/employee');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch,CURLOPT_HTTPAUTH,CURLAUTH_BASIC);
-        curl_setopt($ch, CURLOPT_USERPWD, "admin@vergazka:39c8f67393ee");
+        
+    public function getList(){
+        $ch = curl_init($this->getUrl());
+        $this->getAuth($ch);
         $res = curl_exec($ch);
         $result = json_decode($res,true);
         curl_close($ch);
         for($i=0; $i < count($result['rows']); $i++) {
-            var_dump($result['rows'][$i]['fullName']);
+            print_r($result['rows'][$i]['fullName']);
+            print_r(' id= ' . $result['rows'][$i]['id']);
             echo '<br>';
         }
         
@@ -23,17 +22,14 @@ class employeeController {
             "middleName" => $_POST['middleName'],
             "lastName" => $_POST['lastName']
         ];
-        $ch = curl_init('https://online.moysklad.ru/api/remap/1.2/entity/employee');
+        $ch = curl_init($this->getUrl());
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data, JSON_UNESCAPED_UNICODE));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch,CURLOPT_HTTPAUTH,CURLAUTH_BASIC);
-        curl_setopt($ch, CURLOPT_USERPWD, "admin@vergazka:39c8f67393ee");
+        $this->getAuth($ch);
         $res = curl_exec($ch);
         $result = json_decode($res,true);
         curl_close($ch);
-        return $result;
     }
     
     public function changeEmployee() {
@@ -43,31 +39,43 @@ class employeeController {
 
         $id  = $_POST['id'];
 
-        $ch = curl_init("https://online.moysklad.ru/api/remap/1.2/entity/employee/" . $id);
+        $ch = curl_init($this->getUrl() . $id);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data, JSON_UNESCAPED_UNICODE));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch,CURLOPT_HTTPAUTH,CURLAUTH_BASIC);
-        curl_setopt($ch, CURLOPT_USERPWD, "admin@vergazka:39c8f67393ee");
+        $this->getAuth($ch);
         $res = curl_exec($ch);
         $result = json_decode($res,true);
         curl_close($ch);
-        print_r("Успех");
     }
     
     public function deleteEmployee() {
         
         $id  = $_POST['id'];
 
-        $ch = curl_init("https://online.moysklad.ru/api/remap/1.2/entity/employee/" . $id);
+        $ch = curl_init($this->getUrl() . $id);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch,CURLOPT_HTTPAUTH,CURLAUTH_BASIC);
-        curl_setopt($ch, CURLOPT_USERPWD, "admin@vergazka:39c8f67393ee");
+        $this->getAuth($ch);
         $res = curl_exec($ch);
         $result = json_decode($res,true);
         curl_close($ch);
     }
+    
+    private function getUrl(){
+        return 'https://online.moysklad.ru/api/remap/1.2/entity/employee/';
+    }
+    
+    private function getData(){
+        return "admin@vergazka:39c8f67393ee";
+    }
+    
+    private function getAuth($ch){
+        return [
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true),
+            curl_setopt($ch,CURLOPT_HTTPAUTH,CURLAUTH_BASIC),
+            curl_setopt($ch, CURLOPT_USERPWD, $this->getData())
+        ];
+    }
+    
 }
 
