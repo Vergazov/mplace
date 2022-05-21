@@ -11,8 +11,9 @@ class employeeController {
         for($i=0; $i < count($result['rows']); $i++) {
             print_r($result['rows'][$i]['fullName']);
             print_r(' id= ' . $result['rows'][$i]['id']);
-            echo '<br>';
+            echo '<br>';            
         }
+
         
     }
     
@@ -66,7 +67,7 @@ class employeeController {
     }
     
     private function getData(){
-        return "admin@vergazka:39c8f67393ee";
+        return "admin@vergazka:12345Aa";
     }
     
     private function getAuth($ch){
