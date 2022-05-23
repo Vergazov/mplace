@@ -1,0 +1,14 @@
+{
+   "appUid":"dev5.sorochinsky",
+       "accountName":"sloudel15",
+           "access":
+        [
+            {
+                "resource":"https://online.moysklad.ru/api/remap/1.2/",
+                "scope":["admin"],
+                "permissions":null,
+                "access_token":"0a8a2b01d81f4fd88820eccd01eea81ff5ae7a47"
+            }
+        ],
+            "cause":"Install"
+}

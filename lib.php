@@ -156,16 +156,16 @@ $currentAppInstance = null;
 
 class AppInstance {
 
-    const UNKNOWN = 0;
-    const SETTINGS_REQUIRED = 1;
-    const ACTIVATED = 100;
+        const UNKNOWN = 0;
+        const SETTINGS_REQUIRED = 1;
+        const ACTIVATED = 100;
 
-    var $appId;
-    var $accountId;
-    var $infoMessage;
-    var $store;
+        var $appId;
+        var $accountId;
+        var $infoMessage;
+        var $store;
 
-    var $accessToken;
+        var $accessToken;
 
     var $status = AppInstance::UNKNOWN;
 
@@ -197,7 +197,7 @@ class AppInstance {
         @mkdir('data');
         file_put_contents($this->filename(), serialize($this));
     }
-
+    
     function delete() {
         @unlink($this->filename());
     }
